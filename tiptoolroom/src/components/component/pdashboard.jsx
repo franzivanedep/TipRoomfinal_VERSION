@@ -294,7 +294,7 @@ useEffect(() => {
                       <div className="ml-auto">{accountData?.email}</div>
                     </div>
                     <div className="flex items-center">
-                      <div>Student ID</div>
+                      <div>Instructor ID</div>
                       <div className="ml-auto">{accountDetails?.p_id}</div>
                     </div>
                   </CardContent>
