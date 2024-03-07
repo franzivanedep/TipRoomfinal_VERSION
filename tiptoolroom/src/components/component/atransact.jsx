@@ -260,28 +260,46 @@ export function Atransact() {
 
       const confirmButton = (
         <TableCell>
-<Button className="mr-2" variant="outline" onClick={() => {
-  const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
-  handleConfirm(t_ids);
-}}>Confirm</Button>
+         
+
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
   console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
   handleReject(t_ids);
-}}>Reject</Button>         <Button className="mr-2" variant="outline" onClick={() => {
+  alert("Reject")
+  window.location.reload();
+}}
+disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any transaction in the group has st_id of 2
+ style={{
+    backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit', // Grey background when disabled
+    cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
+ }}
+>Reject</Button>         <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
   console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
   handlePrepare(t_ids);
-}}>Prepare</Button> 
+  alert("Prepare")
+  window.location.reload();
+}}
+disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any transaction in the group has st_id of 2
+ style={{
+    backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit', // Grey background when disabled
+    cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
+ }}
+>Prepare</Button> 
+
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
   console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
   handleReturned(t_ids);
+  alert("Returned")
+  window.location.reload();
 }}>Returned</Button>
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
+  console.log('Passing t_ids to handleConfirm:', t_ids);
+  alert("READY")
+  window.location.reload(); // Log the t_ids
   handleReady(t_ids);
 }}>Ready</Button>      
 

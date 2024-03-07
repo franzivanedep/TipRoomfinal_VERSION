@@ -35,7 +35,7 @@ const router = useRouter()
             <Link
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white"
               href="/Admin/Assigning/Adding">
-              Reports
+              Adding Item
             </Link>
             <Link
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white"

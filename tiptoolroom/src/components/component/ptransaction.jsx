@@ -55,9 +55,7 @@ export function Ptransaction() {
       // Update the state with the new transaction data
       setItemData(prevData => {
         return prevData.map(tx => {
-          // Check if the current transaction's t_id is in the updated transactions array
           if (updatedTransactions.some(updatedTx => updatedTx.t_id === tx.t_id)) {
-            // If yes, return the updated transaction, otherwise return the original one
             return updatedTransactions.find(updatedTx => updatedTx.t_id === tx.t_id) || tx;
           } else {
             return tx;
