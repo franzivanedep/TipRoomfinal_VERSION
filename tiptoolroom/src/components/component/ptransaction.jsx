@@ -5,7 +5,9 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from '@
 import { useEffect, useState } from 'react';
 
 export function Ptransaction() {
-  const [itemData, setItemData] = useState([]); // Initialize with an empty array
+  const [itemData, setItemData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+ // Initialize with an empty array
   const p_id = localStorage.getItem('P_ID');
 
   useEffect(() => {
@@ -45,6 +47,7 @@ export function Ptransaction() {
             throw new Error('Failed to update transaction status');
         }
       }
+      
   
       // Assuming the server returns the updated transaction data
       const updatedTransactions = await response.json();
@@ -120,9 +123,17 @@ export function Ptransaction() {
         <TableCell>
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
+  console.log('Passing t_ids to handleConfirm:', t_ids);
+  alert("CONFIRMED")
+  window.location.reload();
   handleConfirm(t_ids);
-}}>Confirm</Button>
+}}
+disabled={group.some(transaction => transaction.st_id === 2)} // Disable if any transaction in the group has st_id of 2
+ style={{
+    backgroundColor: group.some(transaction => transaction.st_id === 2) ? '#cfcfcf' : 'inherit', // Grey background when disabled
+    cursor: group.some(transaction => transaction.st_id === 2) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
+ }}
+>Confirm</Button>
          <Button variant="outline">Reject</Button>
         </TableCell>
       );
