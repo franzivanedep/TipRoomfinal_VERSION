@@ -276,10 +276,10 @@
                 className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
                 size="icon"
                 variant="ghost">
-                  <img
+                  <Image
                     alt="profile"
                     className="profile "
-                    src="/profile.png"
+                    src={profile}
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop
                       e.target.src = 'fallback-image-url'; // Set fallback image URL

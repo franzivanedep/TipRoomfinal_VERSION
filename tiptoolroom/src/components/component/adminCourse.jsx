@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { Acourseassign } from './acourseassign';
 import { useRouter } from "next/navigation";
+import Image from 'next/image'
+import profile from '../../../public/profile.png';
 export function Admincourse() {
   const router = useRouter(); // Make sure to import useRouter from 'next/router'
   const [errorMessage, setErrorMessage] = useState(null);
@@ -110,11 +112,11 @@ export function Admincourse() {
                   className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
                   size="icon"
                   variant="ghost">
-                  <img
+                  <Image
                     alt="Avatar"
                     className="rounded-full"
                     height="32"
-                    src="/placeholder.svg"
+                    src={profile}
                     style={{
                       aspectRatio: "32/32",
                       objectFit: "cover",

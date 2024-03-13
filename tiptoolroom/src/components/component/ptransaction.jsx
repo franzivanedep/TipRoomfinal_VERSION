@@ -67,9 +67,51 @@ export function Ptransaction() {
       // Display an error message to the user
     }
   };
+  const handleReject = async (t_ids) => {
+    try {
+       const response = await fetch(`http://localhost:6969/r/updatestatus?newStatus=5`, {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ transactionIds: t_ids }), // Pass an array of transaction IDs
+       });
+   
+       if (!response.ok) {
+         switch (response.status) {
+           case 404:
+             throw new Error('Transaction not found');
+           case 500:
+             throw new Error('Server error occurred');
+           default:
+             throw new Error('Failed to update transaction status');
+         }
+       }
+   
+       const updatedTransactions = await response.json();
+   
+       setItemData(prevData => {
+         return prevData.map(tx => {
+           if (updatedTransactions.some(updatedTx => updatedTx.t_id === tx.t_id)) {
+             return updatedTransactions.find(updatedTx => updatedTx.t_id === tx.t_id) || tx;
+           } else {
+             return tx;
+           }
+         });
+       });
+    } catch (error) {
+       console.error('Error updating transaction status: ', error);
+    }
+   };
+   
   const statusMessages = {
     1: 'Student Request',
-    2: 'Confirmed'
+    2: 'Confirmed',
+    3: 'Confirmed',
+    4: 'Confirmed',
+
+
+    5: 'Reject',
    
  };
   
@@ -132,9 +174,25 @@ disabled={group.some(transaction => transaction.st_id === 2)} // Disable if any 
     cursor: group.some(transaction => transaction.st_id === 2) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
  }}
 >Confirm</Button>
-         <Button variant="outline">Reject</Button>
-        </TableCell>
-      );
+</TableCell>
+ );
+const rejectButton = (
+  <TableCell>
+     <Button className="mr-2" variant="outline" onClick={() => {
+       const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
+       console.log('Passing t_ids to handleReject:', t_ids); // Corrected log message
+       handleReject(t_ids);
+       alert("Reject");
+       window.location.reload();
+     }}
+     disabled={group.some(transaction => transaction.st_id === 4)} // Corrected condition to check for st_id of 4
+     style={{
+       backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit', // Grey background when disabled
+       cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
+     }}
+     >Reject</Button>
+  </TableCell>
+ );
 
       return (
         <TableRow key={groupIndex}>
@@ -188,6 +246,7 @@ disabled={group.some(transaction => transaction.st_id === 2)} // Disable if any 
         </TableCell>
         <TableCell>
           {confirmButton}
+          {rejectButton}
         </TableCell>
       </TableRow>
       

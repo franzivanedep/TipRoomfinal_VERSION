@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation"
 import { ToolboxCompile } from "./toolbox-compile"
 import Image from 'next/image';
 import logo from '../../../public/logo.png';
+import profile from '../../../public/profile.png';
+
 export function Dtoolbox() {
   const [toolboxItems, setToolboxItems] = useState([]);
  
@@ -85,11 +87,11 @@ export function Dtoolbox() {
                 className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
                 size="icon"
                 variant="ghost">
-                <img
+                <Image
                   alt="Avatar"
                   className="rounded-full"
                   height="32"
-                  src="/placeholder.svg"
+                  src={profile}
                   style={{
                     aspectRatio: "32/32",
                     objectFit: "cover",

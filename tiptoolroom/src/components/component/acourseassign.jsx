@@ -130,7 +130,7 @@ export function Acourseassign() {
         
       <Card >
         <CardHeader>
-          <CardTitle>Assign Tasks</CardTitle>
+          <CardTitle>Assign Courses</CardTitle>
           <CardDescription>Select Instuctor to assign in Courses</CardDescription>
         </CardHeader>
         <CardContent>

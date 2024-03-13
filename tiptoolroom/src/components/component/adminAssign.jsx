@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { Assigning, assigning } from "./assigning";
 import { useRouter } from "next/navigation";
+import Image from 'next/image'
+import profile from '../../../public/profile.png';
 export function Adminassign() {
   const [jwt, setJwt] = useState('');
   
@@ -112,11 +114,11 @@ export function Adminassign() {
                   className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
                   size="icon"
                   variant="ghost">
-                  <img
+                  <Image
                     alt="Avatar"
                     className="rounded-full"
                     height="32"
-                    src="/placeholder.svg"
+                    src={profile}
                     style={{
                       aspectRatio: "32/32",
                       objectFit: "cover",

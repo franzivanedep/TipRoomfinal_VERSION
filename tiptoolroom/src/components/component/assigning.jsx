@@ -130,7 +130,7 @@ export function Assigning() {
         
       <Card >
         <CardHeader>
-          <CardTitle>Assign Tasks</CardTitle>
+          <CardTitle>Assign Student</CardTitle>
           <CardDescription>Select Student to assign the Instructor.</CardDescription>
         </CardHeader>
         <CardContent>

@@ -7,6 +7,8 @@ import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, Dropdown
 import { Ptransaction } from "./ptransaction"
 import { useState, useEffect} from "react"
 import { useRouter } from "next/navigation";
+import Image from 'next/image'
+import profile from '../../../public/profile.png';
 
 export function Proftransact() {
   const [jwt, setJwt] = useState('');
@@ -123,11 +125,11 @@ useEffect(() => {
                 className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
                 size="icon"
                 variant="ghost">
-                <img
+                <Image
                   alt="Avatar"
                   className="rounded-full"
                   height="32"
-                  src="/placeholder.svg"
+                  src={profile}
                   style={{
                     aspectRatio: "32/32",
                     objectFit: "cover",
