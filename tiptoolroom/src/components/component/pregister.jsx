@@ -30,7 +30,6 @@ export function Pregister() {
       });
 
       const data = await response.json();
-      console.log(data);
       
       router.push('/professor/Login');
     } catch (error) {

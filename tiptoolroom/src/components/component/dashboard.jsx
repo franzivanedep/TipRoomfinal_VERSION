@@ -39,7 +39,6 @@
         })
         .then(data => {
             setAccountData(data);
-            console.log(data);
         })
         .catch(error => {
             console.error("Error fetching account data: ", error);
@@ -69,7 +68,6 @@
           throw new Error(data.message || 'An error occurred');
         }
   
-        console.log('Success: Role is  1');
       } catch (error) {
         setErrorMessage(error.message);
         if (error.message.includes('Role is not  1')) {
@@ -102,7 +100,6 @@
         })
         .then(data => {
             setAccountDetails(data);
-            console.log(data);
         })
         .catch(error => {
             console.error("Error fetching account data: ", error);
@@ -118,7 +115,6 @@
         })
         .then(data => {
           setaccountID(data);
-            console.log(data);
         })
         .catch(error => {
             console.error("Error fetching account data: ", error);
@@ -138,8 +134,7 @@
         .then(data => {
           // Assuming data is an array of objects, and we want to log the s_id of the first object
           if (data && data.length > 0) {
-            console.log('s_id from local storage:', userId); // Use userId here
-            console.log('s_id from database:', data[0].s_id);
+           
             setItemData(data);
           } else {
             console.warn('No data found for the given s_id');
@@ -155,7 +150,7 @@
 
   const renderRows = () => {
     const statusMessages = {
-      1: 'added to Toolbox',
+      1: 'Waiting for Instructor Approval',
       2: 'Approved by your instructor',
       3: 'approved by Admin ',
       4: 'Preparing',
@@ -202,6 +197,8 @@
             }).format(new Date(transaction.stime))}
           </TableCell>
           <TableCell>{statusMessages[transaction.st_id]}</TableCell>
+          <TableCell>{[transaction.course]}</TableCell>
+
         </TableRow>
       ))}
     </React.Fragment>
@@ -316,7 +313,11 @@
                   <TableHeader>
                   <TableRow>
                       <TableHead className="max-w-[150px]">Date</TableHead>
+                      <TableHead>Time</TableHead>
+
                       <TableHead>Status</TableHead>
+                      <TableHead>course</TableHead>
+
                       <TableHead />
                   </TableRow>
                   </TableHeader>
