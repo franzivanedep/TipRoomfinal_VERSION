@@ -67,30 +67,29 @@ export function Plogin() {
 
 
   
- return (
-    <div className="mx-auto max-w-[350px] space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Log In</h1>
-        <p className="text-gray-500 dark:text-gray-400">Enter your email to get started</p>
-      </div>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" placeholder="m@tip.edu.ph" required type="email" value={email} onChange={e => setEmail(e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="Password">Password</Label>
-          <Input id="password" placeholder="password" required type="password" value={userPass} onChange={e => setUserPass(e.target.value)} />
-        </div>
-        <Button onClick={() => handleSubmit(email, userPass)} className="w-full" type="submit">Continue</Button>
-      </div>
-
-
-<p className="text-gray-500 dark:text-gray-400">
- <Link href="/professor/Register">Not Register yet?</Link>
-</p>
-
-    </div>
-    
+return (
+  <div className="flex items-center justify-center h-screen">
+     <div className="bg-white p-6 border border-gray-300 shadow-lg rounded-lg max-w-[350px] space-y-6">
+       <div className="space-y-2 text-center">
+         <h1 className="text-3xl font-bold">Professor Log In</h1>
+         <p className="text-gray-500 dark:text-gray-400">Enter your email to get started</p>
+       </div>
+       <div className="space-y-4">
+         <div className="space-y-2">
+           <Label htmlFor="email">Email</Label>
+           <Input id="email" placeholder="m@tip.edu.ph" required type="email" value={email} onChange={e => setEmail(e.target.value)} />
+         </div>
+         <div className="space-y-2">
+           <Label htmlFor="Password">Password</Label>
+           <Input id="password" placeholder="password" required type="password" value={userPass} onChange={e => setUserPass(e.target.value)} />
+         </div>
+         <Button onClick={() => handleSubmit(email, userPass)} className="w-full" type="submit">Continue</Button>
+       </div>
+       <p className="text-gray-500 dark:text-gray-400">
+         <Link href="/professor/Register">Not Register yet?</Link>
+       </p>
+     </div>
+  </div>
  );
+ 
 }
