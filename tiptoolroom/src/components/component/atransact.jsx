@@ -19,7 +19,6 @@ export function Atransact() {
       })
       .then(data => {
         setItemData(data);
-        console.log(data);
       })
       .catch(error => {
         console.error('Error fetching items data: ', error);
@@ -264,7 +263,6 @@ export function Atransact() {
 
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
   handleReject(t_ids);
   alert("Reject")
   window.location.reload();
@@ -276,7 +274,6 @@ disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any 
  }}
 >Reject</Button>         <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
   handlePrepare(t_ids);
   alert("Prepare")
   window.location.reload();
@@ -290,14 +287,12 @@ disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any 
 
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids); // Log the t_ids
   handleReturned(t_ids);
   alert("Returned")
   window.location.reload();
 }}>Returned</Button>
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids);
   alert("READY")
   window.location.reload(); // Log the t_ids
   handleReady(t_ids);

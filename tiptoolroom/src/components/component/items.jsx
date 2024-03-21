@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState, useMemo, useContext } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,8 @@ export function Items() {
       });
   
       toolboxContext?.addItemToToolbox(item);
-      console.log(`Added ${item.i_id} ${item.name} to toolbox.`);
+      alert(item.name + ' added to toolbox');
+
   } catch (error) {
       console.error("Error adding item to toolbox: ", error);
   }
@@ -45,7 +47,6 @@ export function Items() {
       })
       .then(data => {
         setItemsData(data);
-        console.log(data);
       })
       .catch(error => {
         console.error("Error fetching items data: ", error);

@@ -41,7 +41,6 @@ export function Plogin() {
     }
 
     const result = await response.json();
-    console.log(result);
 
     // If no token exists or the token is the same, proceed with the login
     sessionStorage.setItem('jwt', result.token);
@@ -50,7 +49,6 @@ export function Plogin() {
     if (result.p_id) {
       localStorage.setItem('P_ID', result.p_id);
     }
-    console.log("USER LOGIN WITH ID : ", localStorage.getItem('ID'));
 
     if (result.role ===  1) {
       router.push('/'); // Redirect to home if the user's role is  1

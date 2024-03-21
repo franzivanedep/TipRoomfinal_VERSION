@@ -20,7 +20,6 @@ export function Ptransaction() {
       })
       .then(data => {
         setItemData(data);
-        console.log(data);
       })
       .catch(error => {
         console.error('Error fetching items data: ', error);
@@ -163,7 +162,6 @@ export function Ptransaction() {
         <TableCell>
 <Button className="mr-2" variant="outline" onClick={() => {
   const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  console.log('Passing t_ids to handleConfirm:', t_ids);
   alert("CONFIRMED")
   window.location.reload();
   handleConfirm(t_ids);
@@ -180,7 +178,6 @@ const rejectButton = (
   <TableCell>
      <Button className="mr-2" variant="outline" onClick={() => {
        const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-       console.log('Passing t_ids to handleReject:', t_ids); // Corrected log message
        handleReject(t_ids);
        alert("Reject");
        window.location.reload();
