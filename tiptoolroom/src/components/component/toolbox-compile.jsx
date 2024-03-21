@@ -21,6 +21,8 @@ export function ToolboxCompile() {
   const [error, setError] = useState(null);
   const [quantityValue, setQuantityValue] = useState(null);
   const [jwt , setJwt] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const router = useRouter()
 
  
@@ -138,6 +140,7 @@ const [refreshKey, setRefreshKey] = useState(0);
 
 
 const addToCart = async () => {
+event.preventDefault(); // Prevent the default form submission
 
    const studentId = localStorage.getItem('S_ID');
   if (!studentId) {
@@ -190,6 +193,9 @@ const addToCart = async () => {
 
 
     const data = await response.text();
+setIsModalOpen(true);
+     setAddedItemsPayload(payload);
+     // Open the modal
     
     fetchItemNames();
     console.log(data);
@@ -250,11 +256,31 @@ const handleSelectChange = async (event) => {
         console.error('Error fetching courses:', error);
     }
 };
+const selectedInstructorInfo = selectedPId;
+const selectedCourseInfo = selectedCourse;
+
+
+ 
 
   
 
   return (
     <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
+{isModalOpen && (
+ <div className="alert-modal">
+    <div className="alert-content">
+      <h2>Items Added</h2>
+      <p>Instructor: {selectedInstructorInfo}</p>
+      <p>Course: {selectedCourseInfo}</p>
+      <button id="okButton" onClick={() => {
+        window.location.href = '/profile';
+        fetchItemNames();
+        setIsModalOpen(false); // Close the modal
+      }}>OK</button>
+    </div>
+ </div>
+)}
+
       <div className="flex flex-col">
         <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
           <h1 className="font-semibold text-lg md:text-2xl">Toolbox</h1>

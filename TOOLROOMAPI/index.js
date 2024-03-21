@@ -936,6 +936,8 @@ app.get('/student', function (req, res) {
     });
    });
 
+  
+
    
    app.get('/transact', function (req, res) {
     // Get the p_id from the query parameters
@@ -1003,6 +1005,14 @@ app.get('/admin/transactions', (req, res) => {
    app.get('/req/transact/:s_id', function (req, res) {
     let s_id = req.params.s_id;
     db.query('SELECT * FROM transactionstable WHERE s_id = ?', [s_id], function (error, results, fields) {
+       if (error) throw error;
+       res.send(results);
+    });
+});
+
+app.get('/req/toolbox/:s_id', function (req, res) {
+    let s_id = req.params.s_id;
+    db.query('SELECT * FROM toolbox WHERE s_id = ?', [s_id], function (error, results, fields) {
        if (error) throw error;
        res.send(results);
     });

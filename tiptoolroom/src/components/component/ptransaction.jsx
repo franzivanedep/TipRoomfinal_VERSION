@@ -227,7 +227,7 @@ const rejectButton = (
           {group.map((transactionGroup, index) => {
             return (
               <div key={index}>
-                <h3>{transactionGroup.name}</h3>
+                <h3>{transactionGroup.name} ({transactionGroup.quantity})</h3>
                 <ul>
                   {transactionGroup.transactions?.map((transaction, i) => (
                     <li key={i}>{transaction.name}: {transaction.quantity}</li>

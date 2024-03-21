@@ -17,24 +17,43 @@ export function Items() {
 
  const PageSize = 4;
  const addItemToToolbox = async (item) => {
-  try {
-      const s_id = localStorage.getItem('S_ID'); // Retrieve the s_id from local storage
+  if (item.quantity < 1) {
+     alert('This item is not available for addition.');
+     return;
+  }
  
-      await fetch('http://localhost:6969/toolbox', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ i_id: item.i_id, itemName: item.name, s_id: s_id, images: item.images }), // Add the s_id to the request body
-      });
-  
-      toolboxContext?.addItemToToolbox(item);
-      alert(item.name + ' added to toolbox');
-
+  try {
+     const s_id = localStorage.getItem('S_ID'); // Retrieve the s_id from local storage
+ 
+     // Fetch the current user's toolbox items
+     const response = await fetch(`http://localhost:6969/req/toolbox/${s_id}`);
+     const toolboxItems = await response.json();
+ 
+     // Check if the item already exists in the toolbox
+     const itemExists = toolboxItems.some(toolboxItem => toolboxItem.i_id === item.i_id);
+ 
+     if (itemExists) {
+       alert(`${item.name} is already in the toolbox.`);
+       return;
+     }
+ 
+     // If the item doesn't exist, add it to the toolbox
+     await fetch('http://localhost:6969/toolbox', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({ i_id: item.i_id, itemName: item.name, s_id: s_id, images: item.images }),
+     });
+ 
+     toolboxContext?.addItemToToolbox(item);
+     alert(item.name + ' added to toolbox');
+ 
   } catch (error) {
-      console.error("Error adding item to toolbox: ", error);
+     console.error("Error adding item to toolbox: ", error);
   }
  }
+ 
  
  
   useEffect(() => {
