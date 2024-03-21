@@ -3,6 +3,7 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/com
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { EditModal } from './editmodal';
 
 export function Addingitem() {
   const [items, setItems] = useState([]);
@@ -85,6 +86,12 @@ export function Addingitem() {
     });
   };
 
+  const EditItemFromServer = (i_id) => {
+    console.log('Editing item with ID:', i_id);
+   };
+   
+
+
   return (
     <div className="grid gap-4">
       <Card>
@@ -149,11 +156,27 @@ export function Addingitem() {
                   <td className="border px-4 py-2">{item.name}</td>
                   <td className="border px-4 py-2">{item.quantity}</td>
                   <td className="border px-4 py-2">{item.i_id}</td>
-                  <td className="border px-4 py-2">{item.category}</td>
+                  <td className="border px-4 py-2">
+ {(() => {
+    switch (item.ct_id) {
+      case 1:
+        return "Computer Engineering";
+      case 2:
+        return "Electrical Engineering";
+      case 3:
+        return "Mechanical Engineering";
+      case 4:
+        return "Chemical Engineering";
+      default:
+        return "Unknown";
+    }
+ })()}
+</td>
+
                   <td className="border px-4 py-2">
                     <img
                       alt={`${item.name} Image`}
-                      src={`http://localhost:6969/public/photos/${item.imagePath}`}
+                      src={`${item.images}`}
                       style={{
                         aspectRatio: "50/50",
                         objectFit: "cover",
@@ -162,11 +185,19 @@ export function Addingitem() {
                       height="50"
                     />
                   </td>
-                  <td className="border px-4 py-2">
-                    <Button onClick={() => deleteItemFromServer(item.i_id)} type="button">
-                      Remove
-                    </Button>
-                  </td>
+                  <td className="border text-center">
+ <Button onClick={() => deleteItemFromServer(item.i_id)} type="button" className="me-5">
+    Remove
+ </Button>
+ <EditModal
+        onEdit={(updatedInvoice) => {
+          // Handle the updated invoice here, e.g., update the state or call an API
+          console.log('Updated invoice:', updatedInvoice);
+        }}
+        initialInvoice={item} // Pass the current item as the initial invoice to edit
+      />
+</td>
+                  
                 </tr>
               ))}
             </tbody>

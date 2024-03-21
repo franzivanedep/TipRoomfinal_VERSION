@@ -859,6 +859,26 @@ app.get('/courses', function (req, res) {
 });
 
 
+app.put('/items/:i_id', function(req, res) {
+    const i_id = req.params.i_id;
+    const updatedItem = req.body;
+
+    // Assuming your database update function looks something like this
+    db.query('UPDATE items SET name = ?, quantity = ?, ct_id = ?, images = ? WHERE i_id = ?',
+        [updatedItem.name, updatedItem.quantity, updatedItem.ct_id, updatedItem.images, i_id],
+        function(error, results) {
+            if (error) {
+                console.error('Error updating item:', error);
+                res.status(500).send('Error updating item');
+            } else {
+                console.log('Item updated successfully');
+                res.status(200).send('Item updated successfully');
+            }
+        }
+    );
+});
+
+
 app.get('/professors', function (req, res) {
     db.query('SELECT * FROM professors', function (error, results, fields) {
        if (error) throw error;
