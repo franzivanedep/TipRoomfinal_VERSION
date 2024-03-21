@@ -216,7 +216,9 @@ export function Atransact() {
     3: 'approved by Admin',
     4: 'Preparing',
     5: 'reject',
-    6: 'Ready to Pick up'
+    6: 'Ready to Pick up',
+    7: 'Returned',
+
  };
   
   
@@ -232,6 +234,8 @@ export function Atransact() {
       const nameComparison = a.name.localeCompare(b.name);
       if (nameComparison !==  0) return timeComparison;
 
+      
+
       return a.studentname.localeCompare(b.studentname);
     });
 
@@ -242,6 +246,7 @@ export function Atransact() {
       if (currentGroup &&
           currentGroup[0].sdate === transaction.sdate &&
           currentGroup[0].stime === transaction.stime &&
+
           currentGroup[0].studentname === transaction.studentname) {
         currentGroup.push(transaction);
       } else {
@@ -267,36 +272,52 @@ export function Atransact() {
   alert("Reject")
   window.location.reload();
 }}
-disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any transaction in the group has st_id of 2
+disabled={group.some(transaction => transaction.st_id === 4 || transaction.st_id === 6)}  
  style={{
-    backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit', // Grey background when disabled
-    cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
+    backgroundColor: group.some(transaction => transaction.st_id === 4 || transaction.st_id === 6) ? '#cfcfcf' : 'inherit', 
+    cursor: group.some(transaction => transaction.st_id === 4 || transaction.st_id === 6) ? 'not-allowed' : 'pointer' 
  }}
->Reject</Button>         <Button className="mr-2" variant="outline" onClick={() => {
-  const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
+>Reject</Button>         
+<Button className="mr-2" variant="outline" onClick={() => {
+  const t_ids = group.map(transaction => transaction.t_id); 
   handlePrepare(t_ids);
   alert("Prepare")
   window.location.reload();
 }}
-disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any transaction in the group has st_id of 2
+disabled={group.some(transaction => transaction.st_id === 4 || transaction.st_id === 6)} 
  style={{
-    backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit', // Grey background when disabled
-    cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
+    backgroundColor: group.some(transaction => transaction.st_id === 4 || transaction.st_id === 6) ? '#cfcfcf' : 'inherit',
+    cursor: group.some(transaction => transaction.st_id === 4 || transaction.st_id === 6) ? 'not-allowed' : 'pointer' 
  }}
 >Prepare</Button> 
 
+
 <Button className="mr-2" variant="outline" onClick={() => {
-  const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
+  const t_ids = group.map(transaction => transaction.t_id); 
   handleReturned(t_ids);
   alert("Returned")
   window.location.reload();
-}}>Returned</Button>
+}}
+disabled={group.some(transaction => transaction.st_id === 4)} 
+ style={{
+    backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit',
+    cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' 
+ }}
+>Returned</Button> 
+ 
+
 <Button className="mr-2" variant="outline" onClick={() => {
-  const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  alert("READY")
-  window.location.reload(); // Log the t_ids
+  const t_ids = group.map(transaction => transaction.t_id); 
   handleReady(t_ids);
-}}>Ready</Button>      
+  alert("READY")
+  window.location.reload();
+}}
+disabled={group.some(transaction => transaction.st_id === 5 || transaction.st_id === 6)} 
+ style={{
+    backgroundColor: group.some(transaction => transaction.st_id === 5|| transaction.st_id === 6) ? '#cfcfcf' : 'inherit',
+    cursor: group.some(transaction => transaction.st_id === 5|| transaction.st_id === 6) ? 'not-allowed' : 'pointer' 
+ }}
+>Ready</Button> 
 
 
         </TableCell>
@@ -344,7 +365,8 @@ disabled={group.some(transaction => transaction.st_id === 4)} // Disable if any 
           <TableCell>
             {group.map((transactionGroup, index) => (
               <div key={index}>
-                <h3>{transactionGroup.name}</h3>
+                <h3>      {transactionGroup.name} (quantity: {transactionGroup.quantity})
+</h3>
                 <ul>
                   {transactionGroup.transactions?.map((transaction, i) => (
                     <li key={i}>{transaction.name}: {transaction.quantity}</li>

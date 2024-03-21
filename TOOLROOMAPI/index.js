@@ -808,6 +808,22 @@ app.get('/admins', function (req, res) {
        res.send(results);
     });
    });
+   app.get('/check/accounts', function (req, res) {
+    const email = req.query.email; 
+    if (!email) {
+        return res.status(400).send('Email is required');
+    }
+
+    db.query('SELECT * FROM accounts WHERE email = ?', [email], function (error, results, fields) {
+        if (error) throw error;
+        if (results.length === 0) {
+            return res.status(404).send('Account not found');
+        }
+        const roleId = results[0].role_id;
+        res.send({ role_id: roleId });
+    });
+});
+
 
 app.get('/courses', function (req, res) {
     db.query('SELECT * FROM courses', function (error, results, fields) {
@@ -859,24 +875,60 @@ app.get('/courses', function (req, res) {
 });
 
 
-app.put('/items/:i_id', function(req, res) {
+app.put('/up/items/:i_id', upload.single('images'), function(req, res) {
     const i_id = req.params.i_id;
-    const updatedItem = req.body;
+    const { name, ct_id, quantity } = req.body; // Destructure fields from req.body
+    let imagePath = null;
+    if (req.file) {
+        const imageUrl = `http://localhost:6969/public/photos/${req.file.filename}`;
+        imagePath = imageUrl;
+    }
 
-    // Assuming your database update function looks something like this
-    db.query('UPDATE items SET name = ?, quantity = ?, ct_id = ?, images = ? WHERE i_id = ?',
-        [updatedItem.name, updatedItem.quantity, updatedItem.ct_id, updatedItem.images, i_id],
-        function(error, results) {
-            if (error) {
-                console.error('Error updating item:', error);
-                res.status(500).send('Error updating item');
-            } else {
-                console.log('Item updated successfully');
-                res.status(200).send('Item updated successfully');
-            }
+    // Prepare an array to hold the fields to be updated and their new values
+    let updateFields = [];
+    let updateValues = [];
+
+    // Conditionally add fields to be updated
+    if (name !== undefined) {
+        updateFields.push('name = ?');
+        updateValues.push(name);
+    }
+    if (quantity !== undefined) {
+        updateFields.push('quantity = ?');
+        updateValues.push(quantity);
+    }
+    if (ct_id !== undefined) {
+        updateFields.push('ct_id = ?');
+        updateValues.push(ct_id);
+    }
+    if (imagePath) {
+        updateFields.push('images = ?');
+        updateValues.push(imagePath);
+    }
+
+    // If no fields were provided, return an error
+    if (updateFields.length === 0) {
+        return res.status(400).json({ message: 'No fields provided to update.' });
+    }
+
+    // Construct the SQL query string
+    const updateQuery = `UPDATE items SET ${updateFields.join(', ')} WHERE i_id = ?`;
+    updateValues.push(i_id); // Add the i_id to the end of the values array
+
+    db.query(updateQuery, updateValues, function(error, results) {
+        if (error) {
+            console.error('Error updating item:', error);
+            res.status(500).send('Error updating item');
+        } else {
+            console.log('Item updated successfully');
+            res.status(200).send('Item updated successfully');
         }
-    );
+    });
 });
+
+
+
+   
 
 
 app.get('/professors', function (req, res) {
@@ -909,7 +961,6 @@ app.get('/professors', function (req, res) {
   app.post('/coursesrelation', function (req, res) {
     const { p_ids, c_id } = req.body;
   
-    // First, check if the c_id exists in the courses table
     const checkCourseSql = `SELECT c_id FROM courses WHERE c_id = ?`;
     db.query(checkCourseSql, [c_id], function (error, results) {
       if (error) {
@@ -918,13 +969,11 @@ app.get('/professors', function (req, res) {
         return;
       }
   
-      // If the c_id does not exist, return an error
       if (results.length ===  0) {
         res.status(400).send({ error: 'The course ID does not exist.' });
         return;
       }
   
-      // If the c_id exists, proceed with inserting the relations
       const values = p_ids.map(p_id => `('${p_id}', '${c_id}')`).join(', ');
       const sql = `INSERT INTO coursesrelation (p_id, c_id) VALUES ${values}`;
   
@@ -951,6 +1000,13 @@ app.get('/admins', function (req, res) {
 
 app.get('/student', function (req, res) {
     db.query('SELECT * FROM student', function (error, results, fields) {
+       if (error) throw error;
+       res.send(results);
+    });
+   });
+
+   app.get('/get/items', function (req, res) {
+    db.query('SELECT * FROM items', function (error, results, fields) {
        if (error) throw error;
        res.send(results);
     });

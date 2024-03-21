@@ -12,67 +12,82 @@ import logo from '../../../public/logo.png';
 export function Signup() {
 
  const [email, setEmail] = useState("");
- const [userPass, setUserPass] = useState(""); // renamed 'a' to 'setUserPass'
+ const [userPass, setUserPass] = useState(""); 
  const router = useRouter();
  const handleSubmit = async (email, userPass) => {
   const existingToken = sessionStorage.getItem('jwt');
-     
+       
   if (existingToken) {
-    alert('Another user is already logged in.');
-    return; 
+      alert('Another user is already logged in.');
+      return; 
   }
-
-  // Check if password and email are equal
+  
   if (email.trim() === "" || userPass.trim() === "") {
-    alert("Email and password cannot be empty.");
-    return;
+      alert("Email and password cannot be empty.");
+      return;
   }
-
-
-
-  // Check if email lacks "@"
+  
   if (!email.includes("@")) {
-    alert("Invalid email: Email must contain '@'.");
-    return;
+      alert("Invalid email: Email must contain '@'.");
+      return;
   }
-
+  
   try {
-    const response = await fetch('http://localhost:6969/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: userPass,
-      }),
-    });
+      // First, check the role_id
+      const roleResponse = await fetch(`http://localhost:6969/check/accounts?email=${email}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    
+      if (!roleResponse.ok) {
+        throw new Error(`HTTP error! status: ${roleResponse.status}`);
+      }
   
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-
-   
+      const roleResult = await roleResponse.json();
   
-    localStorage.setItem('ID', result.ID);
-    sessionStorage.setItem('jwt', result.token);
-    localStorage.setItem('S_ID', result.s_id);
+      if (roleResult.role_id === 2) {
+        router.push('/professor/Login');
+        return;
+      }       if (roleResult.role_id !== 1) {
+        alert("Unauthorized access. Only students role");
+        router.push('/');
+        return;
+      }
   
-    console.log("USER LOGIN WITH ID : ", localStorage.getItem('ID'));
-    console.log("STUDENT ID : ", localStorage.getItem('S_ID'));
+      const response = await fetch('http://localhost:6969/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: userPass,
+        }),
+      });
+    
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
   
-    if (result.role ===  2) {
-      router.push('/professor/Login'); // Redirect to professor login if the user's role_id is  2
-    } else {
-      router.push('/profile'); // Redirect to profile for other roles
-    }
+      const result = await response.json();
+  
+      localStorage.setItem('ID', result.ID);
+      sessionStorage.setItem('jwt', result.token);
+      localStorage.setItem('S_ID', result.s_id);
+    
+      console.log("USER LOGIN WITH ID : ", localStorage.getItem('ID'));
+      console.log("STUDENT ID : ", localStorage.getItem('S_ID'));
+    
+      router.push('/profile'); 
   } catch (e) {
-    alert("Wrong Credentials");
-    router.push('/');
+      alert("Wrong Credentials");
+      router.push('/');
   }
-};
+ };
+ 
+ 
 
 
   

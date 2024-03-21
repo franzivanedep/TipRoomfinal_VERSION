@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 
 export function EditModal({ onEdit, initialInvoice }) {
     const [editableInvoice, setEditableInvoice] = useState(initialInvoice);
+    const [selectedFile, setSelectedFile] = useState(null); // New state for the selected file
 
     const handleInputChange = (e, field) => {
         setEditableInvoice({
@@ -14,24 +15,51 @@ export function EditModal({ onEdit, initialInvoice }) {
         });
     };
 
-    const handleSubmit = () => {
-        // Define the request options
-        const requestOptions = {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(editableInvoice)
-        };
 
-        // Make the PUT request
-        fetch(`http://localhost:6969/items/${editableInvoice.i_id}`, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Item updated:', data);
-                // Optionally, you can call the onEdit callback here if you need to update the parent component's state
-                onEdit(editableInvoice);
-            })
-            .catch(error => console.error('Error updating item:', error));
-    };
+    const handleSubmit = () => {
+      const formData = new FormData();
+     
+      // Conditionally append fields to formData
+      if (selectedFile) {
+         formData.append('images', selectedFile);
+      }
+      if (editableInvoice.name !== initialInvoice.name) {
+         formData.append('name', editableInvoice.name);
+      }
+      if (editableInvoice.quantity !== initialInvoice.quantity) {
+         formData.append('quantity', editableInvoice.quantity);
+      }
+      if (editableInvoice.ct_id !== initialInvoice.ct_id) {
+         formData.append('ct_id', editableInvoice.ct_id);
+      }
+     
+      const requestOptions = {
+         method: "PUT",
+         body: formData
+      };
+     
+      // Make the PUT request
+      fetch(`http://localhost:6969/up/items/${editableInvoice.i_id}`, requestOptions)
+         .then(response => {
+           // Check if the response is JSON
+           const contentType = response.headers.get("content-type");
+           if (contentType && contentType.indexOf("application/json") !== -1) {
+             return response.json();
+           } else {
+             // Handle non-JSON response (e.g., plain text)
+             return response.text().then(text => ({ message: text }));
+           }
+         })
+         .then(data => {
+           alert('Item updated:', data);
+           onEdit(editableInvoice); // Assuming this updates the parent component's state
+           window.location.reload(); // Refresh the page
+         })
+         .catch(error => console.error('Error updating item:', error));
+     };
+     
+     
+  
 
     return (
       <Popover>
@@ -73,12 +101,8 @@ export function EditModal({ onEdit, initialInvoice }) {
               </div>
               <div className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor="images">Image URL</Label>
-                <Input
-                 id="images"
-                 value={editableInvoice.images}
-                 onChange={(e) => handleInputChange(e, 'images')}
-                 className="col-span-2 h-8"
-                />
+                <Input id="image" type="file" onChange={(e) => setSelectedFile(e.target.files[0])} />
+
               </div>
             </div>
             <div className="text-right">

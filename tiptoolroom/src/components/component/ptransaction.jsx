@@ -156,39 +156,40 @@ export function Ptransaction() {
       // Determine if all course names are the same within the group
       const uniqueCourses = new Set(group.map(transaction => transaction.course));
       const allSameCourse = uniqueCourses.size ===  1;
+      const isDisabled = group.some(transaction => transaction.st_id === 2 || transaction.st_id === 5);
 
-      // Render the Confirm button only once per group
       const confirmButton = (
         <TableCell>
-<Button className="mr-2" variant="outline" onClick={() => {
-  const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-  alert("CONFIRMED")
-  window.location.reload();
-  handleConfirm(t_ids);
-}}
-disabled={group.some(transaction => transaction.st_id === 2)} // Disable if any transaction in the group has st_id of 2
- style={{
-    backgroundColor: group.some(transaction => transaction.st_id === 2) ? '#cfcfcf' : 'inherit', // Grey background when disabled
-    cursor: group.some(transaction => transaction.st_id === 2) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
- }}
->Confirm</Button>
-</TableCell>
- );
-const rejectButton = (
-  <TableCell>
-     <Button className="mr-2" variant="outline" onClick={() => {
-       const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
-       handleReject(t_ids);
-       alert("Reject");
-       window.location.reload();
-     }}
-     disabled={group.some(transaction => transaction.st_id === 4)} // Corrected condition to check for st_id of 4
-     style={{
-       backgroundColor: group.some(transaction => transaction.st_id === 4) ? '#cfcfcf' : 'inherit', // Grey background when disabled
-       cursor: group.some(transaction => transaction.st_id === 4) ? 'not-allowed' : 'pointer' // Change cursor to not-allowed when disabled
-     }}
-     >Reject</Button>
-  </TableCell>
+        <Button className="mr-2" variant="outline" onClick={() => {
+          const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
+          alert("CONFIRMED");
+          window.location.reload();
+          handleConfirm(t_ids);
+        }}
+        disabled={isDisabled} 
+        style={{
+          backgroundColor: isDisabled ? '#cfcfcf' : 'inherit', 
+          cursor: isDisabled ? 'not-allowed' : 'pointer' 
+        }}
+        >Confirm</Button>
+     </TableCell>
+    );
+    
+    const rejectButton = (
+     <TableCell>
+        <Button className="mr-2" variant="outline" onClick={() => {
+          const t_ids = group.map(transaction => transaction.t_id); // Get an array of t_ids from the group
+          handleReject(t_ids);
+          alert("Reject");
+          window.location.reload();
+        }}
+        disabled={isDisabled} 
+        style={{
+          backgroundColor: isDisabled ? '#cfcfcf' : 'inherit', 
+          cursor: isDisabled ? 'not-allowed' : 'pointer' 
+        }}
+        >Reject</Button>
+     </TableCell>
  );
 
       return (
@@ -227,7 +228,7 @@ const rejectButton = (
           {group.map((transactionGroup, index) => {
             return (
               <div key={index}>
-                <h3>{transactionGroup.name} ({transactionGroup.quantity})</h3>
+                <h3>{transactionGroup.name} (quantity: {transactionGroup.quantity})</h3>
                 <ul>
                   {transactionGroup.transactions?.map((transaction, i) => (
                     <li key={i}>{transaction.name}: {transaction.quantity}</li>

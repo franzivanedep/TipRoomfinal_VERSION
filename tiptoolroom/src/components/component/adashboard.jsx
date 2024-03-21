@@ -27,22 +27,22 @@ const router = useRouter()
             <Link
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white"
               href="/Admin/Assigning">
-              Assigning
+              Manage Student
             </Link>
             <Link
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white"
               href="/Admin">
-              Transactions
+              Manage Transactions
             </Link>
             <Link
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white"
               href="/Admin/Assigning/Adding">
-              Adding Item
+              Manage Item
             </Link>
             <Link
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white"
               href="/Admin/courses">
-              Assigning Course
+              Manage Course
             </Link>
           </nav>
         </div>

@@ -21,7 +21,7 @@ export function Addingitem() {
 
   const fetchItems = async () => {
     try {
-      const response = await fetch('http://localhost:6969/items');
+      const response = await fetch('http://localhost:6969/get/items');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -62,6 +62,11 @@ export function Addingitem() {
       const data = await response.json();
       if (data && data.message === 'Item inserted successfully') {
         window.alert('Item added successfully');
+        setName('');
+        setQuantity('');
+        setIId('');
+        setImages(null);
+        setctId('');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -86,10 +91,7 @@ export function Addingitem() {
     });
   };
 
-  const EditItemFromServer = (i_id) => {
-    console.log('Editing item with ID:', i_id);
-   };
-   
+ 
 
 
   return (
