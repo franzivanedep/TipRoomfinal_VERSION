@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
    app.post('/insert/items', upload.single('images'), async (req, res) => {
     try {
-      const { i_id, name, ct_id, quantity } = req.body;
+      const { item_id, name, ct_id, quantity } = req.body;
       let imagePath = null;
       if (req.file) {
         const imageUrl = `http://localhost:6969/public/photos/${req.file.filename}`;
@@ -43,7 +43,7 @@ const storage = multer.diskStorage({
         return res.status(400).json({ message: 'No image file was uploaded.' });
       }
   
-      const result = await db.query('INSERT INTO items (i_id, name, ct_id, quantity, images) VALUES (?, ?, ?, ?, ?)', [i_id, name, ct_id, quantity, imagePath]);
+      const result = await db.query('INSERT INTO items (item_id, name, ct_id, quantity, images) VALUES (?, ?, ?, ?, ?)', [item_id, name, ct_id, quantity, imagePath]);
   
       if (imagePath) {
         res.status(201).json({ message: 'Item inserted successfully', imagePath: imagePath });
@@ -832,12 +832,14 @@ app.get('/courses', function (req, res) {
     });
    });
    
+ 
    app.get('/items', function (req, res) {
-    // First, retrieve all items
+    // Use query parameters to get the last refresh time
+    const lastRefreshTime = new Date(req.query.lastRefreshTime);
+
     db.query('SELECT * FROM items', function (error, items, fields) {
         if (error) throw error;
         
-        // Next, execute the SQL query to calculate the updated quantities
         db.query(`
             SELECT   
                 t.st_id,
@@ -855,24 +857,46 @@ app.get('/courses', function (req, res) {
         `, function (queryError, results, fields) {
             if (queryError) throw queryError;
             
-            // Now, iterate over the results and update the items in the database
-            results.forEach(function(result) {
-                db.query('UPDATE items SET quantity = ? WHERE i_id = ?', [result.updated_quantity, result.i_id], function(updateError, updateResult) {
-                    if (updateError) throw updateError;
-                    
-                    // Log the result of the update operation
-                    console.log('Updated item ' + result.i_id + ' with quantity ' + result.updated_quantity);
+            const updatePromises = results.map(result => {
+                return new Promise((resolve, reject) => {
+                    db.query('SELECT last_updated FROM items WHERE i_id = ?', [result.i_id], function(checkError, checkResult) {
+                        if (checkError) reject(checkError);
+                        
+                        // Check if the item's last_updated timestamp is older than the last refresh
+                        if (!checkResult[0].last_updated || checkResult[0].last_updated < lastRefreshTime) {
+                            console.log(`Updating item ${result.i_id} with quantity ${result.updated_quantity}`);
+                            // Update the item's quantity and set last_updated to the current timestamp
+                            db.query('UPDATE items SET quantity = ?, last_updated = NOW() WHERE i_id = ?', [result.updated_quantity, result.i_id], function(updateError, updateResult) {
+                                if (updateError) reject(updateError);
+                                
+                                console.log(`Updated item ${result.i_id} with quantity ${result.updated_quantity}`);
+                                resolve();
+                            });
+                        } else {
+                            console.log(`Skipping update for item ${result.i_id} as it was recently updated.`);
+                            resolve();
+                        }
+                    });
                 });
             });
             
-            // After updating the items, send the updated list of items as response
-            db.query('SELECT * FROM items', function (finalSelectError, finalResults, fields) {
-                if (finalSelectError) throw finalSelectError;
-                res.send(finalResults);
+            Promise.all(updatePromises)
+            .then(() => {
+                db.query('SELECT * FROM items', function (finalSelectError, finalResults, fields) {
+                    if (finalSelectError) throw finalSelectError;
+                    res.send(finalResults);
+                });
+            })
+            .catch(error => {
+                console.error('Error updating items:', error);
+                res.status(500).send('Error updating items');
             });
         });
     });
 });
+
+
+
 
 
 app.put('/up/items/:i_id', upload.single('images'), function(req, res) {
@@ -1106,17 +1130,14 @@ app.post('/updatestatus', async (req, res) => {
     const newStatusId = parseInt(req.query.newStatus, 10);
 
     try {
-        // Use parameterized queries to prevent SQL injection
         const sqlUpdateQuery = `UPDATE transactionstable SET st_id = ? WHERE t_id IN (?)`;
         const values = [newStatusId, transactionIds];
         const result = await db.query(sqlUpdateQuery, values);
 
-        // Check if the update was successful for all transactionIds
         if (result.rowCount !== transactionIds.length) {
             return res.status(404).send(`One or more transactions not found or not updated`);
         }
 
-        // Send back a success message
         res.json({ message: 'Transaction statuses updated successfully.' });
     } catch (error) {
         console.error('Error updating transaction statuses: ', error);
@@ -1124,12 +1145,10 @@ app.post('/updatestatus', async (req, res) => {
     }
 });
 app.post('/p/updatestatus', async (req, res) => {
-    // Check if transactionIds is an array
     if (!Array.isArray(req.body.transactionIds)) {
         return res.status(400).send('Invalid request: transactionIds must be an array');
     }
 
-    // Log the received transactionIds
     console.log('Received transactionIds:', req.body.transactionIds);
 
     const transactionIds = req.body.transactionIds;

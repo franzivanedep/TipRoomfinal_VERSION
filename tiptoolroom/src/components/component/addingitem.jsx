@@ -40,7 +40,7 @@ export function Addingitem() {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('i_id', iId);
+    formData.append('item_id', iId);
     formData.append('name', name);
 
     formData.append('quantity', quantity);
@@ -85,9 +85,12 @@ export function Addingitem() {
     })
     .then(data => {
       console.log('Success:', data);
+      alert ("Deleted Succesfully")
     })
     .catch((error) => {
       console.error('Error:', error);
+      alert ("The item is currently on transactions, or there was an issue while deleting.")
+
     });
   };
 
@@ -112,8 +115,8 @@ export function Addingitem() {
               <Input id="quantity" placeholder="" onChange={(e) => setQuantity(e.target.value)} value={quantity} name="quantity" type="text" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="i_id">Item ID</Label>
-              <Input id="i_id" placeholder="" onChange={(e) => setIId(e.target.value)} value={iId} name="i_id" type="text" />
+              <Label htmlFor="item_id">Item ID</Label>
+              <Input id="item_id" placeholder="" onChange={(e) => setIId(e.target.value)} value={iId} name="item_id" type="text" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="image">Image</Label>
@@ -157,7 +160,7 @@ export function Addingitem() {
                 <tr key={item.i_id}>
                   <td className="border px-4 py-2">{item.name}</td>
                   <td className="border px-4 py-2">{item.quantity}</td>
-                  <td className="border px-4 py-2">{item.i_id}</td>
+                  <td className="border px-4 py-2">{item.item_id}</td>
                   <td className="border px-4 py-2">
  {(() => {
     switch (item.ct_id) {

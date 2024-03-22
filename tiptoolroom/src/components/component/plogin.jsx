@@ -49,7 +49,7 @@ export function Plogin() {
         router.push('/');
         return;
       }       if (roleResult.role_id !== 2) {
-        alert("Unauthorized access. Only students role");
+        alert("Unauthorized access. ");
         router.push('/');
         return;
       }

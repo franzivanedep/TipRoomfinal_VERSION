@@ -111,10 +111,13 @@ export function Acourseassign() {
         .then(response => response.json())
         .then(data => console.log('Data:', data))
         .catch(error => console.error('Error:', error));
+        alert('Inserted Successfully');
+
     } else {
-      console.error('Please select both a courses and an instructor.');
+      alert('Please select both a courses and an instructor.');
       console.log(selectedStudentIds);
       console.log(selectedProfessorId);
+
     }
   };
   
@@ -134,18 +137,18 @@ export function Acourseassign() {
           <CardDescription>Select Instuctor to assign in Courses</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-2"> {/* Adjusted grid layout */}
             <div className="space-y-4">
               {professors.map((professors, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                 <Avatar className="h-9 w-9">
+              <Avatar className="h-6 w-6"> {/* Simplified Avatar */}
  <AvatarImage alt={`${professors.first_name} ${professors.last_name}`} src="/placeholder-avatar.jpg" />
  <AvatarFallback>{professors.first_name ? professors.first_name[0] : ''}{professors.last_name ? professors.last_name[0] : ''}</AvatarFallback>
 </Avatar>
 
                  <div>
-                   <div className="font-medium">{professors.first_name} {professors.last_name}</div>
-                   <div className="text-sm text-gray-500 dark:text-gray-400">{professors.prog_id}</div>
+                 <div className="font-medium text-sm">{professors.first_name} {professors.last_name}</div> {/* Adjusted text size */}
+                <div className="text-xs text-gray-500 dark:text-gray-400">{professors.prog_id}</div> {/* Adjusted text size */}
                  </div>
                  <input
   type="checkbox"

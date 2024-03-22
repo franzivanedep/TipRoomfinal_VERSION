@@ -52,7 +52,7 @@ export function Assigning() {
     .then(response => response.json())
     .then(data => {
       setProfessors(data);
-      console.log(data); // Corrected to lowercase 'data'
+      console.log(data); 
     })
     .catch(error => console.error(error));
 }, []);
@@ -61,7 +61,6 @@ export function Assigning() {
  const [selectedStudentIds, setSelectedStudentIds] = useState([]);
  const [selectedProfessorId, setSelectedProfessorId] = useState(null);
 
-  // Function to handle checkbox change for selecting a student
   const handleStudentSelection = (studentId) => {
     setSelectedStudentIds(prevSelectedIds => {
       if (prevSelectedIds.includes(studentId)) {
@@ -104,17 +103,19 @@ export function Assigning() {
         body: JSON.stringify(assignmentPayload) // No need for safeStringify since we're not dealing with circular references
       };
   
-      // Debugging statement to inspect the stringified payload
       console.log('After stringifying:', requestOptions.body);
   
       fetch('http://localhost:6969/studentinstructors', requestOptions)
         .then(response => response.json())
         .then(data => console.log('Data:', data))
         .catch(error => console.error('Error:', error));
+        alert('Inserted Successfully');
+
     } else {
-      console.error('Please select both a student and an instructor.');
+      alert('Please select both a student and an instructor.');
       console.log(selectedStudentIds);
       console.log(selectedProfessorId);
+
     }
   };
   
@@ -124,66 +125,54 @@ export function Assigning() {
 
 
  return (
-    <main
-    
-      >
-        
-      <Card >
-        <CardHeader>
-          <CardTitle>Assign Student</CardTitle>
-          <CardDescription>Select Student to assign the Instructor.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-4">
-              {students.map((students, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                 <Avatar className="h-9 w-9">
- <AvatarImage alt={`${students.first_name} ${students.last_name}`} src="/placeholder-avatar.jpg" />
- <AvatarFallback>{students.first_name ? students.first_name[0] : ''}{students.last_name ? students.last_name[0] : ''}</AvatarFallback>
-</Avatar>
-
-                 <div>
-                   <div className="font-medium">{students.first_name} {students.last_name}</div>
-                   <div className="text-sm text-gray-500 dark:text-gray-400">{students.prog_id}</div>
-                 </div>
-                 <input
-  type="checkbox"
-  className="ml-auto"
-  id={`students-${students.s_id}`}
-  checked={selectedStudentIds.includes(students.s_id)}
-  
-  onChange={() => handleStudentSelection(students.s_id)}
-/>
-                </div>
-              ))}
+  <main>
+  <Card>
+    <CardHeader>
+      <CardTitle>Assign Student</CardTitle>
+      <CardDescription>Select Student to assign the Instructor.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-3 gap-2"> {/* Adjusted grid layout */}
+        {students.map((student, index) => (
+          <div key={index} className="flex items-center space-x-2">
+            <Avatar className="h-6 w-6"> {/* Simplified Avatar */}
+              <AvatarImage alt={`${student.first_name} ${student.last_name}`} src="/placeholder-avatar.jpg" />
+              <AvatarFallback>{student.first_name ? student.first_name[0] : ''}{student.last_name ? student.last_name[0] : ''}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <div className="font-medium text-sm">{student.first_name} {student.last_name}</div> {/* Adjusted text size */}
+              <div className="text-xs text-gray-500 dark:text-gray-400">{student.prog_id}</div> {/* Adjusted text size */}
             </div>
+            <input
+              type="checkbox"
+              className="ml-auto"
+              id={`students-${student.s_id}`}
+              checked={selectedStudentIds.includes(student.s_id)}
+              onChange={() => handleStudentSelection(student.s_id)}
+            />
           </div>
-        </CardContent>
-        <CardFooter>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="task">Assign Instructor</Label>
-              <select id="professors-select" onChange={handleProfessorSelection}>
-  <option value="" disabled selected>Select a Instructor</option>
-  {professors.map(professor => (
-    <option key={professor.p_id} value={professor.p_id}>
-      {professor.first_name} {professor.last_name}
-    </option>
-   ))}
-</select>
-
-
-
-
-
-            </div>
-            <Button className="w-full" onClick={assignInstructor}>
-              Assign Instructor
-            </Button>
-          </div>
-        </CardFooter>
-      </Card>
-    </main>
+        ))}
+      </div>
+    </CardContent>
+    <CardFooter>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="task">Assign Instructor</Label>
+          <select id="professors-select" onChange={handleProfessorSelection}>
+            <option value="" disabled selected>Select a Instructor</option>
+            {professors.map(professor => (
+              <option key={professor.p_id} value={professor.p_id}>
+               {professor.first_name} {professor.last_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button className="w-full" onClick={assignInstructor}>
+          Assign Instructor
+        </Button>
+      </div>
+    </CardFooter>
+  </Card>
+</main>
  );
 }

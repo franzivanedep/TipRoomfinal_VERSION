@@ -267,12 +267,38 @@ const selectedCourseInfo = selectedCourse;
   return (
     <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
 {isModalOpen && (
- <div className="alert-modal">
-    <div className="alert-content">
-      <h2>Items Added</h2>
+ <div className="alert-modal" style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+ }}>
+    <div className="alert-content" style={{
+      backgroundColor: '#fff',
+      padding: '20px',
+      borderRadius: '10px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.25)',
+      width: '400px',
+      maxWidth: '90%',
+    }}>
+      <h2 style={{ marginBottom: '10px' }}>Items Added</h2>
       <p>Instructor: {selectedInstructorInfo}</p>
       <p>Course: {selectedCourseInfo}</p>
-      <button id="okButton" onClick={() => {
+      <button id="okButton" style={{
+        backgroundColor: '#007bff',
+        color: '#fff',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        marginTop: '20px',
+      }} onClick={() => {
         window.location.href = '/profile';
         fetchItemNames();
         setIsModalOpen(false); // Close the modal
@@ -280,6 +306,7 @@ const selectedCourseInfo = selectedCourse;
     </div>
  </div>
 )}
+
 
       <div className="flex flex-col">
         <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
