@@ -68,17 +68,7 @@ export function Admincourse() {
 
     router.push('/Admin/login');
   };
-  useEffect(() => {
-    const clearSessionToken = () => {
-      sessionStorage.removeItem('jwt');
-    };
-  
-    window.addEventListener('beforeunload', clearSessionToken);
-  
-    return () => {
-      window.removeEventListener('beforeunload', clearSessionToken);
-    };
-  }, []); 
+
   return (
     (<div className="flex w-full min-h-screen bg-gray-100 dark:bg-gray-900">
       <aside className="w-64 bg-white dark:bg-gray-800 shadow-md min-h-screen">

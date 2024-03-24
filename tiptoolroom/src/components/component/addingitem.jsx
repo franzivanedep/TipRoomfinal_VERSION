@@ -147,6 +147,8 @@ export function Addingitem() {
           <table className="table-auto w-full">
             <thead>
               <tr>
+              <th className="px-4 py-2">ID</th>
+
                 <th className="px-4 py-2">Name</th>
                 <th className="px-4 py-2">Quantity</th>
                 <th className="px-4 py-2">Item ID</th>
@@ -158,6 +160,8 @@ export function Addingitem() {
             <tbody>
               {items?.map((item) => (
                 <tr key={item.i_id}>
+                                    <td className="border px-4 py-2">{item.i_id}</td>
+
                   <td className="border px-4 py-2">{item.name}</td>
                   <td className="border px-4 py-2">{item.quantity}</td>
                   <td className="border px-4 py-2">{item.item_id}</td>

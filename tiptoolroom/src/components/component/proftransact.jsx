@@ -64,17 +64,7 @@ useEffect(() => {
 
     router.push('/professor/Login');
   };
-  useEffect(() => {
-    const clearSessionToken = () => {
-      sessionStorage.removeItem('jwt');
-    };
-  
-    window.addEventListener('beforeunload', clearSessionToken);
-  
-    return () => {
-      window.removeEventListener('beforeunload', clearSessionToken);
-    };
-  }, []); 
+
   
   
   return (

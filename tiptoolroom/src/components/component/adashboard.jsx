@@ -5,6 +5,7 @@ import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, Dropdown
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { Atransact } from "./atransact"
 import { useRouter } from "next/navigation";
+import { useEffect } from "react"
 import Image from 'next/image'
 import profile from '../../../public/profile.png';
 
