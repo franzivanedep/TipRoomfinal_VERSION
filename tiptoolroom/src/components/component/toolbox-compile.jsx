@@ -120,7 +120,6 @@ export function ToolboxCompile() {
   const handleCourseChange = (event) => {
     const selectedCourse = event.target.value;
     setSelectedCourse(selectedCourse);
-    alert(`Selected Instructor ID: ${selectedCourse}`);
   
     {
         console.error('Error fetching courses:', error);
@@ -247,7 +246,6 @@ useEffect(() => {
 const handleSelectChange = async (event) => {
     const selectedPId = event.target.value;
     setSelectedPId(selectedPId);
-    alert(`Selected Instructor ID: ${selectedPId}`);
 
     try {
         const coursesData = await fetchCoursesByInstructorName(selectedPId);

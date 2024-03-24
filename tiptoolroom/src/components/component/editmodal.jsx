@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 export function EditModal({ onEdit, initialInvoice }) {
     const [editableInvoice, setEditableInvoice] = useState(initialInvoice);
     const [selectedFile, setSelectedFile] = useState(null); // New state for the selected file
+    const [selectedFileName, setSelectedFileName] = useState("");
 
     const handleInputChange = (e, field) => {
         setEditableInvoice({
@@ -57,6 +58,11 @@ export function EditModal({ onEdit, initialInvoice }) {
          })
          .catch(error => console.error('Error updating item:', error));
      };
+     const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setSelectedFileName(file.name);
+     };
      
      
   
@@ -91,19 +97,25 @@ export function EditModal({ onEdit, initialInvoice }) {
                 />
               </div>
               <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="ct_id">Category ID</Label>
-                <Input
-                 id="ct_id"
-                 value={editableInvoice.ct_id}
-                 onChange={(e) => handleInputChange(e, 'ct_id')}
-                 className="col-span-2 h-8"
-                />
-              </div>
-              <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="images">Image URL</Label>
-                <Input id="image" type="file" onChange={(e) => setSelectedFile(e.target.files[0])} />
+ <Label htmlFor="ct_id">Category ID</Label>
+ <select
+    id="ct_id"
+    value={editableInvoice.ct_id}
+    onChange={(e) => handleInputChange(e, 'ct_id')}
+    className="col-span-2 h-8"
+ >
+    <option value="">Select Category</option>
+    <option value="1">Computer Engineering - toolroom 1</option>
+    <option value="2">Electrical Engineering - toolroom 2</option>
+ </select>
+</div>
 
-              </div>
+<div className="grid grid-cols-3 items-center gap-4">
+ <Label htmlFor="images">Image URL</Label>
+ <Input id="image" type="file" onChange={handleFileChange} />
+ <span>{selectedFileName}</span>
+</div>
+
             </div>
             <div className="text-right">
               <Button onClick={handleSubmit}>Submit</Button>

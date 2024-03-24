@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator"
 import BorrowButton from "@/app/profile/borrowbutton"
 import {Items } from "./items"
 import { Toolboxicon } from "./toolboxicon"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation"
 import { ToolboxCompile } from "./toolbox-compile"
 import Image from 'next/image';
@@ -37,6 +37,18 @@ export function Dtoolbox() {
 
   router.push('/');
 };
+
+useEffect(() => {
+  const clearSessionToken = () => {
+    sessionStorage.removeItem('jwt');
+  };
+
+  window.addEventListener('beforeunload', clearSessionToken);
+
+  return () => {
+    window.removeEventListener('beforeunload', clearSessionToken);
+  };
+}, []); 
 
   
   return (
