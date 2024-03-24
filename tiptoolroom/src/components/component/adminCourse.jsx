@@ -68,6 +68,26 @@ export function Admincourse() {
 
     router.push('/Admin/login');
   };
+  useEffect(() => {
+    const removeToken = (event) => {
+      if (!sessionStorage.getItem('pageRefreshed')) {
+        localStorage.removeItem('jwtToken');
+      }
+    };
+
+    const handleRefresh = () => {
+      sessionStorage.setItem('pageRefreshed', 'true');
+    };
+
+    window.addEventListener('beforeunload', removeToken);
+
+    window.addEventListener('beforeunload', handleRefresh);
+
+    return () => {
+      window.removeEventListener('beforeunload', removeToken);
+      window.removeEventListener('beforeunload', handleRefresh);
+    };
+ }, [])
 
   return (
     (<div className="flex w-full min-h-screen bg-gray-100 dark:bg-gray-900">

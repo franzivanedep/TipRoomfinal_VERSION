@@ -78,6 +78,27 @@ export function Ditems({}) {
 
     router.push('/');
   };
+
+  useEffect(() => {
+    const removeToken = (event) => {
+      if (!sessionStorage.getItem('pageRefreshed')) {
+        localStorage.removeItem('jwtToken');
+      }
+    };
+
+    const handleRefresh = () => {
+      sessionStorage.setItem('pageRefreshed', 'true');
+    };
+
+    window.addEventListener('beforeunload', removeToken);
+
+    window.addEventListener('beforeunload', handleRefresh);
+
+    return () => {
+      window.removeEventListener('beforeunload', removeToken);
+      window.removeEventListener('beforeunload', handleRefresh);
+    };
+ }, [])
   
   return (
     

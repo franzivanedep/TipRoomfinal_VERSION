@@ -20,16 +20,25 @@ const router = useRouter()
     router.push('/Admin/login');
   };
   useEffect(() => {
-    const clearSessionToken = () => {
-      sessionStorage.removeItem('jwt');
+    const removeToken = (event) => {
+      if (!sessionStorage.getItem('pageRefreshed')) {
+        localStorage.removeItem('jwtToken');
+      }
     };
-  
-    window.addEventListener('beforeunload', clearSessionToken);
-  
+
+    const handleRefresh = () => {
+      sessionStorage.setItem('pageRefreshed', 'true');
+    };
+
+    window.addEventListener('beforeunload', removeToken);
+
+    window.addEventListener('beforeunload', handleRefresh);
+
     return () => {
-      window.removeEventListener('beforeunload', clearSessionToken);
+      window.removeEventListener('beforeunload', removeToken);
+      window.removeEventListener('beforeunload', handleRefresh);
     };
-  }, []); 
+ }, [])
   return (
     (<div className="flex w-full min-h-screen bg-gray-100 dark:bg-gray-900">
       <aside className="w-64 bg-white dark:bg-gray-800 shadow-md min-h-screen">
