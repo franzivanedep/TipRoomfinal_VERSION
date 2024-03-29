@@ -6,7 +6,30 @@ import { useEffect, useState } from 'react';
 
 export function Atransact() {
   
-  const [itemData, setItemData] = useState([]); // Initialize with an empty array
+  const [itemData, setItemData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+ 
+  const handleViewClick = (group) => {
+    // Prepare the content to be shown in the modal
+    const content = (
+       <div>
+         <h3>Transaction Group</h3>
+         <ul>
+           {group.map((transaction, i) => (
+             <li key={i}>{transaction.name}: {transaction.quantity}</li>
+           ))}
+         </ul>
+       </div>
+    );
+   
+    setModalContent(content);
+    setIsModalOpen(true);
+   };
+   
+   const closeModal = () => {
+    setIsModalOpen(false);
+ };  // Initialize with an empty array
   const a_id = localStorage.getItem('A_ID');
 
   useEffect(() => {
@@ -362,19 +385,19 @@ disabled={group.some(transaction => transaction.st_id === 5 || transaction.st_id
               </div>
             ))}
           </TableCell>
-          <TableCell>
-            {group.map((transactionGroup, index) => (
-              <div key={index}>
-                <h3>      {transactionGroup.name} (quantity: {transactionGroup.quantity})
-</h3>
-                <ul>
-                  {transactionGroup.transactions?.map((transaction, i) => (
-                    <li key={i}>{transaction.name}: {transaction.quantity}</li>
-                   ))}
-                </ul>
+             
+          <TableCell className="transaction-group-cell">
+          <button className="action-button" onClick={() => handleViewClick(group)}>View</button>
+          {isModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content-box">
+                <button className="action-button" onClick={closeModal}>Close</button>
+                {modalContent}
               </div>
-            ))}
-          </TableCell>
+            </div>
+          )}
+        </TableCell>
+
           <TableCell>
             {/* Assuming you have a statusMessages object or similar to map status IDs to messages */}
             {statusMessages[group[0].st_id] || 'Status not found'}

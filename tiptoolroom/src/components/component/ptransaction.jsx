@@ -7,7 +7,30 @@ import { useEffect, useState } from 'react';
 export function Ptransaction() {
   const [itemData, setItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
- // Initialize with an empty array
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+ 
+  const handleViewClick = (group) => {
+    // Prepare the content to be shown in the modal
+    const content = (
+       <div>
+         <h3>Item List</h3>
+         <ul>
+           {group.map((transaction, i) => (
+             <li key={i}>{transaction.name}: {transaction.quantity}</li>
+           ))}
+         </ul>
+       </div>
+    );
+   
+    setModalContent(content);
+    setIsModalOpen(true);
+   };
+   
+  const closeModal = () => {
+     setIsModalOpen(false);
+  };  
+  
   const p_id = localStorage.getItem('P_ID');
 
   useEffect(() => {
@@ -192,6 +215,8 @@ export function Ptransaction() {
      </TableCell>
  );
 
+ 
+
       return (
         <TableRow key={groupIndex}>
         <TableCell>
@@ -224,20 +249,20 @@ export function Ptransaction() {
             </div>
           ))}
         </TableCell>
-        <TableCell>
-          {group.map((transactionGroup, index) => {
-            return (
-              <div key={index}>
-                <h3>{transactionGroup.name} (quantity: {transactionGroup.quantity})</h3>
-                <ul>
-                  {transactionGroup.transactions?.map((transaction, i) => (
-                    <li key={i}>{transaction.name}: {transaction.quantity}</li>
-                  ))}
-                </ul>
+        
+        <TableCell className="transaction-group-cell">
+          <button className="action-button" onClick={() => handleViewClick(group)}>View</button>
+          {isModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content-box">
+                <button className="action-button" onClick={closeModal}>Close</button>
+                {modalContent}
               </div>
-            );
-          })}
+            </div>
+          )}
         </TableCell>
+
+
         <TableCell>
         {statusMessages[group[0].st_id] || 'Status not found'}
 
